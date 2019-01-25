@@ -1,5 +1,6 @@
 import 'phaser';
- 
+import config from '../config/config.js';
+
 export default class BootScene extends Phaser.Scene {
   constructor () {
     super('Boot');
@@ -14,9 +15,9 @@ export default class BootScene extends Phaser.Scene {
 
   create () {
     // Background image
-    const logo = this.add.image(400, 300, 'ggj-logo');
+    const logo = this.add.image(config.width/2, config.height/2, 'ggj-logo');
     logo.setScale(.5);
-    //this.time.delayedCall(0, () => {this.scene.start('Menu');}, [], this);
-    this.scene.start('Game');
+    this.time.delayedCall(1000, () => {this.scene.start('Menu');}, [], this);
+    // this.scene.start('Menu');
   }
 };
