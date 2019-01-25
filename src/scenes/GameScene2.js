@@ -1,5 +1,6 @@
 import 'phaser';
 import commons from '../commons.js';
+import config from '../config/config.js';
 
 export default class GameScene2 extends Phaser.Scene {
   constructor () {
@@ -15,7 +16,7 @@ export default class GameScene2 extends Phaser.Scene {
    */
   preload () {
     commons.preload(this);
-    this.load.image('background','assets/backgrounds/mountains.jpg');
+    this.load.image('background','assets/backgrounds/mountains_low.jpg');
   }
 
   /**
@@ -24,10 +25,10 @@ export default class GameScene2 extends Phaser.Scene {
   create () {
     commons.createPlatform(this);
     const background = this.add.image(800, 400, 'background');
-    background.setDisplaySize(1600, 800);
+    background.setDisplaySize(config.width, config.height);
 
     // this.platforms added by commons.createPlatform()
-    this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+    this.platforms.create(config.width/2, config.height+20, 'ground').setScale(4).refreshBody();
     this.platforms.create(600, 400, 'ground');
     this.platforms.create(50, 250, 'ground');
     this.platforms.create(750, 220, 'ground');
@@ -62,19 +63,16 @@ export default class GameScene2 extends Phaser.Scene {
       if (this.cursors.left.isDown)
         {
             this.player.setVelocityX(-160);
-
             this.player.anims.play('left', true);
         }
         else if (this.cursors.right.isDown)
         {
             this.player.setVelocityX(160);
-
             this.player.anims.play('right', true);
         }
         else
         {
             this.player.setVelocityX(0);
-
             this.player.anims.play('turn');
         }
 
