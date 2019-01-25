@@ -18,6 +18,6 @@ export default class BootScene extends Phaser.Scene {
     const logo = this.add.image(config.width/2, config.height/2, 'ggj-logo');
     logo.setScale(.5);
     this.time.delayedCall(1000, () => {this.scene.start('Menu');}, [], this);
-    // this.scene.start('Menu');
+    this.scene.start('Menu');
   }
 };
