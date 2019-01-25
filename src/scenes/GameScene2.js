@@ -59,34 +59,15 @@ export default class GameScene2 extends Phaser.Scene {
    * @param {float} delta Delta time in microseconds.
    */
   update ()
-    {
-      if (this.cursors.left.isDown)
-        {
-            this.player.setVelocityX(-160);
-            this.player.anims.play('left', true);
-        }
-        else if (this.cursors.right.isDown)
-        {
-            this.player.setVelocityX(160);
-            this.player.anims.play('right', true);
-        }
-        else
-        {
-            this.player.setVelocityX(0);
-            this.player.anims.play('turn');
-        }
+  {
+    commons.updateHandlerPlayerMovement(this);
+  }
 
-        if (this.cursors.up.isDown && this.player.body.touching.down)
-        {
-            this.player.setVelocityY(-330);
-        }
-    }
-
-    collectStar (player, star)
-    {
-        //this.star.disableBody(true, true);
-        this.scene.start('Credits');
-        //this.score += 10;
-        //this.scoreText.setText('Score: ' + this.score);
-    }
+  collectStar (player, star)
+  {
+      //this.star.disableBody(true, true);
+      this.scene.start('Credits');
+      //this.score += 10;
+      //this.scoreText.setText('Score: ' + this.score);
+  }
 };

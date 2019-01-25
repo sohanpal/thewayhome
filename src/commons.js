@@ -49,5 +49,28 @@ export default {
 
     context.cursors = context.input.keyboard.createCursorKeys();
     context.physics.add.collider(context.player, context.platforms);
+  },
+
+  updateHandlerPlayerMovement(context) {
+    if (context.cursors.left.isDown)
+    {
+      context.player.setVelocityX(-160);
+      context.player.anims.play('left', true);
+    }
+    else if (context.cursors.right.isDown)
+    {
+      context.player.setVelocityX(160);
+      context.player.anims.play('right', true);
+    }
+    else
+    {
+      context.player.setVelocityX(0);
+      context.player.anims.play('turn');
+    }
+
+    if (context.cursors.up.isDown && context.player.body.touching.down)
+    {
+      context.player.setVelocityY(-330);
+    }
   }
 }
