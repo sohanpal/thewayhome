@@ -15,6 +15,7 @@ export default class GameScene2 extends Phaser.Scene {
    */
   preload () {
     commons.preload(this);
+    this.load.image('background','assets/backgrounds/mountains.jpg');
   }
 
   /**
@@ -22,8 +23,8 @@ export default class GameScene2 extends Phaser.Scene {
    */
   create () {
     commons.createPlatform(this);
-
-    this.add.image(400, 300, 'sky');
+    const background = this.add.image(800, 400, 'background');
+    background.setDisplaySize(1600, 800);
 
     // this.platforms added by commons.createPlatform()
     this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
