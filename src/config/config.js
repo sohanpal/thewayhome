@@ -1,10 +1,10 @@
 import 'phaser';
- 
+
 export default {
   type: Phaser.AUTO,
   parent: 'phaser-game',
-  width: 800,
-  height: 600, 
+  width: 1600,
+  height: 800,
   physics: {
      default: 'arcade',
         arcade: {
