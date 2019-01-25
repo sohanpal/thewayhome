@@ -1,8 +1,8 @@
 import 'phaser';
  
-export default class GameScene extends Phaser.Scene {
+export default class GameScene2 extends Phaser.Scene {
   constructor () {
-    super('Game');
+    super('Game2');
   }
 
   init() {
@@ -70,7 +70,7 @@ export default class GameScene extends Phaser.Scene {
         this.score = 0;
 
         this.stars = this.physics.add.group({
-            key: 'star',
+            key: 'bomb',
             repeat: 11,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
@@ -123,8 +123,8 @@ export default class GameScene extends Phaser.Scene {
 
     collectStar (player, star)
     {
-        this.scene.start('Game2');
         //this.star.disableBody(true, true);
+        this.scene.start('Credits');
         //this.score += 10;
         //this.scoreText.setText('Score: ' + this.score);
     }
