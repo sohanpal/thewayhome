@@ -3,8 +3,8 @@ import 'phaser';
 export default {
   type: Phaser.AUTO,
   parent: 'phaser-game',
-  width: 1600,
-  height: 800, 
+  width: 800,
+  height: 600, 
   physics: {
      default: 'arcade',
         arcade: {
@@ -12,4 +12,7 @@ export default {
             debug: false
         }
   },
+  audio: {
+      disableWebAudio: true
+  }
 };

@@ -84,9 +84,13 @@ export default class GameScene extends Phaser.Scene {
 
     collectStar (player, star)
     {
-        this.scene.start('Game2');
-        //this.star.disableBody(true, true);
-        //this.score += 10;
-        //this.scoreText.setText('Score: ' + this.score);
+        this.sound.playAudioSprite('sfx', 'numkey');
+        star.disableBody(true, true);
+        this.score += 10;
+        this.scoreText.setText('Score: ' + this.score);
+        if (this.score == 120) {
+          this.sound.playAudioSprite('sfx', 'escape');
+          this.scene.start('Game2');
+        }
     }
 };

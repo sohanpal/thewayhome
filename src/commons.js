@@ -11,6 +11,10 @@ export default {
         'assets/dude.png',
         { frameWidth: 32, frameHeight: 48 }
     );
+    context.load.audioSprite('sfx', 'assets/audio/SoundEffects/fx_mixdown.json', [
+        'assets/audio/SoundEffects/fx_mixdown.ogg',
+        'assets/audio/SoundEffects/fx_mixdown.mp3'
+    ]);
   },
 
   createPlatform(context) {
