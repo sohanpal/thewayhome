@@ -41,10 +41,10 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     commons.createPlayer(this);
     this.score = this.registry.get('score');
 
-    this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
+    this.scoreText = this.add.text(16, 16, 'Turkmenistan manat : ' + commons.convertToCurrency(this.score, 'Turkmenistan'), { fontSize: '32px', fill: '#ffc73b' });
 
     // Map board, when you touch you go to the next level
-    this.finish = this.physics.add.image(1350, 10, 'map_board').setScale(.7);
+    this.finish = this.physics.add.image(1300, 10, 'map_board').setScale(.7);
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     this.physics.add.collider(this.finish, this.platforms);
     this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
@@ -63,7 +63,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
       [12, 9], [14, 9], [17, 10],
     ];
     //@odo uncomment
-    //commons.prepareCollectibles(this.collectibleCoordinates, this);
+    commons.prepareCollectibles(this.collectibleCoordinates, this);
 
     // Create lava tileset
     this.lava = this.physics.add.staticGroup();
@@ -129,7 +129,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
       tiles[x][13] = 'sand';
     }
     // Blocks with a way to the next level
-    tiles[23][7] = 'sand';
+    tiles[21][7] = 'sand';
     tiles[22][7] = 'sand';
 
     tiles[25][8] = 'sand';
@@ -151,8 +151,8 @@ export default class SceneTurkmenistan extends Phaser.Scene {
   touchCollectible (player, touchedItem) {
     this.sound.playAudioSprite('sfx', 'ping');
     touchedItem.disableBody(true, true);
-    this.score += 10;
-    this.scoreText.setText('Score: ' + this.score);
+    this.score += 1;
+    this.scoreText.setText('Turkmenistan manat: ' + commons.convertToCurrency(this.score, 'Turkmenistan'));
 
     let prevSceneScore = this.registry.get('score');
 
