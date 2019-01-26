@@ -58,12 +58,12 @@ export default {
   updateHandlerPlayerMovement(context) {
     if (context.cursors.left.isDown)
     {
-      context.player.setVelocityX(-160);
+      context.player.setVelocityX(-200);
       context.player.anims.play('left', true);
     }
     else if (context.cursors.right.isDown)
     {
-      context.player.setVelocityX(160);
+      context.player.setVelocityX(200);
       context.player.anims.play('right', true);
     }
     else
