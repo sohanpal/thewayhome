@@ -32,7 +32,7 @@ export default class GameScene2 extends Phaser.Scene {
     commons.createPlayer(this);
     this.score = 0;
 
-    this.finish = this.physics.add.image(1400, 600, 'star');
+    this.finish = this.physics.add.image(1380, 600, 'star');
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
     this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -87,6 +87,8 @@ export default class GameScene2 extends Phaser.Scene {
 
     tiles[9][8] = 'leafy03';
     tiles[10][8] = 'leafy03';
+    tiles[9][10] = 'leafy03';
+    tiles[10][10] = 'leafy03';
 
     for (let x = 1; x <= 4; x++) {
       tiles[x][6] = 'leafy03';
@@ -97,6 +99,20 @@ export default class GameScene2 extends Phaser.Scene {
     for (let x = 10; x <= 15; x++) {
       tiles[x][3] = 'leafy03';
     }
+
+    for (let x = 14; x <= 20; x++) {
+      tiles[x][6] = 'leafy03';
+    }
+
+    for (let x = 19; x <= 25; x++) {
+      tiles[x][9] = 'leafy03';
+    }
+
+    for (let x = 12; x <= 16; x++) {
+      tiles[x][10] = 'leafy03';
+    }
+
+    tiles[17][11] = 'leafy03'
 
     return tiles;
   }
