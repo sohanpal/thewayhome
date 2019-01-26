@@ -39,22 +39,28 @@ export default class SceneGermany extends Phaser.Scene {
     commons.createPlayer(this);
     this.score = this.registry.get('score');
 
-    this.finish = this.physics.add.image(1380, 600, 'shroom03').setScale(.5);
-    this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
     this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
 
-    this.physics.add.collider(this.finish, this.platforms);
-    this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
+    if (!this.registry.get('germanySecretPassed')) {
+      this.finish = this.physics.add.image(1500, 720, 'shroom03').setScale(.5);
+      this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      this.physics.add.collider(this.finish, this.platforms);
+      this.physics.add.overlap(this.player, this.finish, this.goToSecret, null, this);
+    }
 
-    this.collectibleCoordinates = [
-      [2, 5], [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
-      [4, 9], [6, 7], [8, 7], [10, 7],
-      [14, 5], [16, 5], [18, 5],
-      [19, 8], [21, 8], [23, 8],
-      [10, 12], [12, 12], [14, 12], [16, 12], [18, 12], [20, 12],
-      [12, 9], [14, 9], [17, 10],
-    ];
+    if(this.registry.get('germanySavedCollectibles')) {
+      // secret was finished. recreate only collectibles not collected before
+      this.collectibleCoordinates = this.registry.get('germanySavedCollectibles');
+    } else {
+      this.collectibleCoordinates = [
+        [2, 5], [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
+        [4, 9], [6, 7], [8, 7], [10, 7],
+        [14, 5], [16, 5], [18, 5],
+        [19, 8], [21, 8], [23, 8],
+        [10, 12], [12, 12], [14, 12], [16, 12], [18, 12], [20, 12],
+        [12, 9], [14, 9], [17, 10],
+      ];
+    }
     commons.prepareCollectibles(this.collectibleCoordinates, this);
   }
 
@@ -69,13 +75,11 @@ export default class SceneGermany extends Phaser.Scene {
     commons.updateHandlerPlayerMovement(this);
   }
 
-  finishStage (player, star)
+  goToSecret (player, star)
   {
-      //this.star.disableBody(true, true);
       this.registry.set('score', this.score);
-      this.scene.start('Credits');
-      //this.score += 10;
-      //this.scoreText.setText('Score: ' + this.score);
+      this.registry.set('germanySavedCollectibles', this.collectibleCoordinates);
+      this.scene.start('GermanySecret');
   }
 
   prepareTileSet ()
@@ -144,6 +148,8 @@ export default class SceneGermany extends Phaser.Scene {
     touchedItem.disableBody(true, true);
     this.score += 10;
     this.scoreText.setText('Score: ' + this.score);
+
+    delete this.collectibleCoordinates[touchedItem.origIndex];
 
     let prevSceneScore = this.registry.get('score');
 
