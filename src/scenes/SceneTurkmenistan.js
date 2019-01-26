@@ -18,14 +18,15 @@ export default class SceneTurkmenistan extends Phaser.Scene {
    */
   preload () {
     commons.preload(this);
-    this.load.image('desert_background','assets/backgrounds/Desert.png');
+    this.load.image('desert_background','assets/backgrounds/1600x800_Desert_Sanjar.png');
 
     this.load.image('shroom03','assets/tilesets/nature/flowers_plants/mushroom03.png');
     this.load.image('stone01','assets/tilesets/nature/_rocks/stone01.png');
     this.load.image('stone06','assets/tilesets/nature/_rocks/stone06.png');
     this.load.image('warning_board','assets/tilesets/nature/signs/board08.png');
     this.load.image('lava','assets/tilesets/nature/_lava/lava 1.png');
-    this.load.image('lava','assets/tilesets/nature/sand/slice05_05.png');
+    this.load.image('sand','assets/tilesets/nature/sand/slice05_05_128.png');
+    this.load.image('sand_ground','assets/tilesets/nature/sand/slice27_27_128.png');
   }
 
   /**
@@ -78,7 +79,6 @@ export default class SceneTurkmenistan extends Phaser.Scene {
       null,
       this
     );
-
   }
 
   /**
@@ -92,10 +92,12 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     commons.updateHandlerPlayerMovement(this);
   }
 
-  // event handler for palyer touching lava
+  // event handler for player touching lava
   touchLava (player, touchedItem)
   {
-    console.log('Lava!');
+    this.registry.set('score', this.score - 10);
+    this.scene.restart();
+    //console.log('Lava!');
   }
 
   finishStage (player, star)
@@ -110,25 +112,24 @@ export default class SceneTurkmenistan extends Phaser.Scene {
   prepareTileSet ()
   {
     let tiles = commons.getBasicSceneTileSet();
-
-    tiles[1][13] = 'full_ground';
-    tiles[1][12] = 'full_ground';
-    tiles[1][11] = 'leafy01';
-    tiles[2][13] = 'full_ground';
-    tiles[2][12] = 'leafy01';
-    tiles[3][13] = 'full_ground';
-    tiles[3][12] = 'leafy01';
-
-    for (let y = 10; y <= 13; y++) {
-      for (let x = 6; x <= 8; x++) {
-        tiles[x][y] = 'full_ground';
-      }
-    }
-
-    for (let x = 14; x <= 20; x++) {
+    //Remove default tiles with grass
+    for (let x = 9; x <= 25; x++) {
       delete tiles[x][13];
     }
 
+    //Put sandy tiles instead
+    for (let x = 1; x <= 13; x++) {
+      tiles[x][13] = 'sand';
+    }
+    for (let x = 21; x <= 25; x++) {
+      tiles[x][13] = 'sand';
+    }
+
+    // for (let y = 10; y <= 13; y++) {
+    //   for (let x = 6; x <= 8; x++) {
+    //     tiles[x][y] = 'sand_ground';
+    //   }
+    // }
     return tiles;
   }
 
