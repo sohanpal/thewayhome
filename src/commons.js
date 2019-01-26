@@ -11,6 +11,14 @@ export default {
     context.load.image('leafy03','assets/tilesets/nature/_leafy_ground/leafy_ground03.png');
     context.load.image('ground01','assets/tilesets/nature/_ground/ground01.png');
 
+    context.load.image('snow','assets/tilesets/nature/snow/snow.png');
+    context.load.image('snow_cliff_left','assets/tilesets/nature/snow/snowCliffLeft.png');
+    context.load.image('ice_block','assets/tilesets/nature/snow/iceBlock.png');
+    context.load.image('snow_cliff_right','assets/tilesets/nature/snow/snowCliffRight.png');
+    context.load.image('tundra','assets/tilesets/nature/snow/tundra.png');
+    context.load.image('tundra_cliff_right','assets/tilesets/nature/snow/tundraCliffRightAlt.png');
+    context.load.image('tundra_cliff_left','assets/tilesets/nature/snow/tundraCliffLeft.png');
+
     for (var i = 1; i < 17; i++) { 
       if (i < 10) {
         context.load.image('hollow0'+i,'assets/tilesets/nature/_hollow/hollow0'+i+'.png');

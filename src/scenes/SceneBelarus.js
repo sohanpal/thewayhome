@@ -5,12 +5,13 @@ import config from '../config/config.js';
 export default class SceneBelarus extends Phaser.Scene {
   constructor () {
     super('Belarus');
-    this.forbiddenAreas = new Set();
     this.tileWidth = 64;
     this.tileHeight = 64;
     this.collectableWidth = 24;
     this.collectableHeight = 22;
     this.score = 0;
+    this.platformTiles = [];
+    this.collectables = [];
 
     //TODO - put into config or common
     this.jumpHeight = 100;
@@ -36,14 +37,15 @@ export default class SceneBelarus extends Phaser.Scene {
     const background = this.add.image(800, 400, 'background_bel');
     background.setDisplaySize(config.width, config.height);
 
-    commons.renderTileSet(this.prepareTileSet(), this);
+    this.prepareTileSet();
+    commons.renderTileSet(this.platformTiles, this);
 
     commons.createPlayer(this);
     this.renderCollectables();
 
     this.score = 0;
 
-    this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
+    this.scoreText = this.add.text(16, 16, 'Belarus rouble: ' + this.score, { fontSize: '32px', fill: '#000' });
   }
 
   /**
@@ -59,146 +61,102 @@ export default class SceneBelarus extends Phaser.Scene {
 
   finishStage (player, star)
   {
-      //this.star.disableBody(true, true);
       this.scene.start('India');
-      //this.score += 10;
-      //this.scoreText.setText('Score: ' + this.score);
   }
 
   prepareTileSet ()
   {
-    let tiles = commons.getBasicSceneTileSet();
+    this.platformTiles = commons.getBasicSceneTileSet('tundra');
 
-    tiles[1][13] = 'full_ground';
-    tiles[1][12] = 'full_ground';
-    tiles[1][11] = 'leafy01';
-    tiles[2][12] = 'leafy01';
-    tiles[2][13] = 'full_ground';
-    tiles[3][12] = 'leafy01';
-    tiles[3][13] = 'full_ground';
+    this.platformTiles[9][13] = 'ice_block';
+    this.platformTiles[10][13] = 'ice_block';
 
-    for (let y = 9; y <= 13; y++) {
-      for (let x = 6; x <= 8; x++) {
-        tiles[x][y] = 'full_ground';
-      }
-    }
-    tiles[8][8] = 'leafy01';
-    tiles[7][8] = 'leafy01';
-    tiles[6][8] = 'leafy01';
-    tiles[5][9] = 'leafy01';
-    tiles[5][10] = 'ground01';
-    tiles[4][10] = 'leafy03';
+    this.platformTiles[4][13] = 'ice_block';
+    this.platformTiles[5][13] = 'ice_block';
 
-    tiles[9][8] = 'leafy03';
-    tiles[10][8] = 'leafy03';
+    this.platformTiles[3][10] = 'tundra_cliff_left';
+    this.platformTiles[4][10] = 'tundra';
+    this.platformTiles[5][10] = 'tundra_cliff_right';
 
-    for (let x = 1; x <= 4; x++) {
-      tiles[x][6] = 'leafy03';
-    }
+    this.platformTiles[6][11] = 'tundra_cliff_left';
+    this.platformTiles[7][11] = 'tundra_cliff_right';
 
-    tiles[7][4] = 'leafy03';
+    this.drawTundraCliff(5, 20, 8);
+    this.drawTundraCliff(9, 13, 6);
+    this.drawTundraCliff(20, 24, 3);
+    this.drawTundraCliff(3, 6, 2);
 
-    for (let x = 10; x <= 15; x++) {
-      tiles[x][3] = 'leafy03';
-    }
-
-    this.setForbiddenAreas(tiles);
-
-    return tiles;
+    this.platformTiles[5][4] = 'tundra';
   }
 
-  /**
-   * calculates the areas of the tilemap where there are already tiles and thus no collectable may be placed
-   * Ideally forbiddenAreas array should contain as few elements as possible
-   * 
-   * @param {array} tiles 
-   */
-  setForbiddenAreas(tiles) {
-      let area = {x1 : -1, y1 : -1, x2 : 0, y2 : 0};
-      for (let x = 1; x <= tiles.length; x++) {
-
-        if (tiles[x] == undefined) {
-            continue;
-        }
-
-          for (let y = 0; y < tiles[x].length; y++) {
-              if (tiles[x][y] != undefined) {
-                if (area.x1 == -1) {
-                    area.x1 = (x-1) * this.tileWidth;
-                }
-                
-                area.x2 = x * this.tileWidth;
-
-                if (area.y1 == -1) {
-                    area.y1 = (y-1) * this.tileHeight;
-                }
-
-                area.y2 = y*this.tileHeight;
-            } else if(area.x1 > -1) {
-                this.forbiddenAreas.add(area);
-                area = {x1 : -1, y1 : -1, x2 : 0, y2 : 0};
-            }
-          }
-      }
-  }
+  drawTundraCliff(x1, x2, y) {
+    this.platformTiles[x1 - 1][y] = 'tundra_cliff_left';
+    for (let i = x1; i <= x2; i++) {
+        this.platformTiles[i][y] = 'tundra'
+    }
+    this.platformTiles[x2 + 1][y] = 'tundra_cliff_right';
+}
 
   renderCollectables() {
     for (let i = 0; i < 20; i++) {
-        let y_coordinate = 0;
-        let x_coordinate = 0;
+        let y_coordinate = -1;
+        let x_coordinate = -1;
 
         let i = 0;
 
         while (!this.isCollectableCoordinatesValid(x_coordinate, y_coordinate)) {
-            y_coordinate = Math.random() * 800;
-            x_coordinate = Math.random() * 1600;
+            y_coordinate = Math.floor(Math.random() * 13);
+            x_coordinate = Math.floor(Math.random() * 25);
         }
 
-        let star = this.physics.add.sprite(x_coordinate, y_coordinate, 'star');
+        if (this.collectables[x_coordinate] == undefined) {
+            this.collectables[x_coordinate] = [];
+        }
+
+        this.collectables[x_coordinate][y_coordinate] = 'star';
+
+        let star = this.physics.add.sprite(x_coordinate * this.tileWidth, y_coordinate * this.tileHeight, 'star');
         star.body.setAllowGravity(false);
         this.physics.add.overlap(this.player, star, function() {this.collectStar(star);}, null, this);
       }
   }
 
   collectStar(obj) {
-        this.scoreText.text = "Score: " + ++this.score;
+        this.score += 10;
+        this.scoreText.text = "Belarus rouble: " + this.score;
         obj.destroy();
 
-        if (this.score >= 3) {
-            console.log("enter");
-            this.scene.start('Game2');
+        if (this.score >= 100) {
+            this.scene.start('Germany');
         }
   }
 
   isCollectableCoordinatesValid(x, y) {
-      if (x < 50) {
-          return false;
-      }
-
-      let inReachFromPlatform = false;
-
-      //@TODO - try forEach
-      for (let i = 0; i < this.forbiddenAreas.length; i++) {
-        var overlap = !(this.forbiddenAreas[i].x2 < x || 
-            this.forbiddenAreas[i].x1 > x + this.collectableWidth || 
-            this.forbiddenAreas[i].y2 < y || 
-            this.forbiddenAreas[i].y1 > y + this.collectableHeight);
-
-        if (this.forbiddenAreas[i].y2 <= y - this.jumpHeight) {
-            inReachFromPlatform = true;
-        }
-
-        if (overlap) {
-            return false;
-        }
-      }
-
-      return true;
-      //return inReachFromPlatform;
+      return x >= 0 &&
+      y >= 0 &&
+      this.isTileReachableFromPlatform(x, y) &&
+      (this.platformTiles[x] == undefined || this.platformTiles[x][y + 1] == undefined) &&
+      (this.collectables[x] == undefined || this.collectables[x][y + 1] == undefined);
   }
 
-  isOverlapping(x1, y1) {
+  isTileReachableFromPlatform(x, y) {
+      for (let y_axis = 0; y_axis <= y; y_axis++) {
+          for (let x_axis = x - 2; x_axis < x + 2; x_axis++) {
+            if (this.platformTiles[x_axis] != undefined && this.platformTiles[x_axis][y_axis] != undefined) {
+                return true;
+            }
+          }
+      }
 
+      for (let y_axis = y - 2; y_axis <= y + 2; y_axis++) {
+        for (let x_axis = x - 2; x_axis <= x + 2; x_axis++) {
+          if (this.platformTiles[x_axis] != undefined && this.platformTiles[x_axis][y_axis] != undefined) {
+              return true;
+          }
+        }
+    }
+
+    return false;
   }
-  
+
 };
