@@ -32,12 +32,12 @@ export default class GameScene2 extends Phaser.Scene {
     commons.renderTileSet(this.prepareTileSet(), this);
 
     commons.createPlayer(this);
-    this.score = 0;
+    this.score = this.registry.get('score');
 
     this.finish = this.physics.add.image(1380, 600, 'star');
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
-    this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
 
     this.physics.add.collider(this.finish, this.platforms);
     this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
@@ -67,7 +67,8 @@ export default class GameScene2 extends Phaser.Scene {
   finishStage (player, star)
   {
       //this.star.disableBody(true, true);
-      this.scene.start('India');
+      this.registry.set('score', this.score);
+      this.scene.start('Credits');
       //this.score += 10;
       //this.scoreText.setText('Score: ' + this.score);
   }
@@ -134,8 +135,11 @@ export default class GameScene2 extends Phaser.Scene {
     this.score += 10;
     this.scoreText.setText('Score: ' + this.score);
 
-    if (this.score == this.collectibleCoordinates.length * 10) {
+    let prevSceneScore = this.registry.get('score');
+
+    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 10) {
       this.sound.playAudioSprite('sfx', 'escape');
+      this.registry.set('score', this.score);
       this.scene.start(this.nextScene);
     }
   }

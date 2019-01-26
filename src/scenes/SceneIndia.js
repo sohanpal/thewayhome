@@ -33,7 +33,7 @@ export default class SceneIndia extends Phaser.Scene {
     this.platforms.create(750, 220, 'ground');
 
     commons.createPlayer(this);
-    this.score = 0;
+    this.score = this.registry.get('score');
 
     this.stars = this.physics.add.group({
         key: 'bomb',
@@ -45,7 +45,7 @@ export default class SceneIndia extends Phaser.Scene {
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     });
 
-    this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
     this.physics.add.collider(this.stars, this.platforms);
 
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
@@ -87,8 +87,9 @@ export default class SceneIndia extends Phaser.Scene {
     collectStar (player, star)
     {
         //this.star.disableBody(true, true);
+        this.score += 10;
+        this.registry.set('score', this.score);
         this.scene.start('Credits');
-        //this.score += 10;
         //this.scoreText.setText('Score: ' + this.score);
     }
 };

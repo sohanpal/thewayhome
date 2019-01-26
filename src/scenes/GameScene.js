@@ -31,7 +31,7 @@ export default class GameScene extends Phaser.Scene {
     this.platforms.create(750, 220, 'ground');
 
     commons.createPlayer(this);
-    this.score = 0;
+    this.score = this.registry.get('score');
 
     this.stars = this.physics.add.group({
         key: 'star',
@@ -68,6 +68,7 @@ export default class GameScene extends Phaser.Scene {
     this.scoreText.setText('Score: ' + this.score);
     if (this.score == 120) {
       this.sound.playAudioSprite('sfx', 'escape');
+      this.registry.set('score', this.score);
       this.scene.start('Game2');
     }
   }
