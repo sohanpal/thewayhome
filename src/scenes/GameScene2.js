@@ -15,6 +15,7 @@ export default class GameScene2 extends Phaser.Scene {
    * Preload images.
    */
   preload () {
+    console.log("preload game 2");
     commons.preload(this);
     this.load.image('background','assets/backgrounds/mountains_low.jpg');
   }

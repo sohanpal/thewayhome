@@ -104,7 +104,7 @@ export default {
     }
 
     // @todo remove
-    this.renderCoordsHelper(tiles, context);
+    //this.renderCoordsHelper(tiles, context);
   },
 
   renderCoordsHelper(tiles, context) {
