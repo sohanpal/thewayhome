@@ -74,7 +74,7 @@ export default {
 
     if (context.cursors.up.isDown && context.player.body.touching.down)
     {
-      context.player.setVelocityY(-330);
+      context.player.setVelocityY(-450);
     }
   },
 
