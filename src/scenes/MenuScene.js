@@ -7,6 +7,7 @@ export default class MenuScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('logo', 'assets/Logo_without_background.png');
   }
 
   /**
@@ -14,17 +15,17 @@ export default class MenuScene extends Phaser.Scene {
    */
   create() {
     // GGJ logo
-    const logo = this.add.image(config.width/2, config.height/2, 'ggj-logo');
-    logo.setScale(.25);
+    const logo = this.add.image(config.width/2, config.height/2, 'logo');
+    logo.setScale(.75);
     const menuStyle = {
       fill: '#02c6c9',
       fontSize: '32px'
     };
 
-    const btnStartGame = this.add.text(config.width/2 - 90, config.height/4, 'Start Game', menuStyle);
+    const btnStartGame = this.add.text(config.width/2 - 95, 60, 'Start Game', menuStyle);
     btnStartGame.setInteractive();
     btnStartGame.on('pointerdown', () => {
-      this.scene.start('Game');
+      this.scene.start('Game2');
     }, this);
 
     // Will be read in the GameScene
