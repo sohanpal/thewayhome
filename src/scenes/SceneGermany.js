@@ -19,6 +19,10 @@ export default class SceneGermany extends Phaser.Scene {
   preload () {
     commons.preload(this);
     this.load.image('background','assets/backgrounds/mountains_low.jpg');
+
+    this.load.image('shroom03','assets/tilesets/nature/flowers_plants/mushroom03.png');
+    this.load.image('stone01','assets/tilesets/nature/_rocks/stone01.png');
+    this.load.image('stone06','assets/tilesets/nature/_rocks/stone06.png');
   }
 
   /**
@@ -34,7 +38,7 @@ export default class SceneGermany extends Phaser.Scene {
     commons.createPlayer(this);
     this.score = this.registry.get('score');
 
-    this.finish = this.physics.add.image(1380, 600, 'star');
+    this.finish = this.physics.add.image(1380, 600, 'shroom03').setScale(.5);
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
     this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
@@ -124,7 +128,12 @@ export default class SceneGermany extends Phaser.Scene {
       tiles[x][10] = 'leafy03';
     }
 
-    tiles[17][11] = 'leafy03'
+    tiles[17][11] = 'leafy03';
+
+    tiles[7][7] = 'stone01';
+    tiles[20][5] = 'stone01';
+    tiles[13][12] = 'stone06';
+    tiles[1][5] = 'stone06';
 
     return tiles;
   }
