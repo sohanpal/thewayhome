@@ -149,7 +149,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
   }
 
   touchCollectible (player, touchedItem) {
-    this.sound.playAudioSprite('sfx', 'numkey');
+    this.sound.playAudioSprite('sfx', 'ping');
     touchedItem.disableBody(true, true);
     this.score += 10;
     this.scoreText.setText('Score: ' + this.score);
