@@ -229,5 +229,27 @@ export default {
       null,
       context
     );
+  },
+
+ /**
+  * Convert collectables to the currencies of a country defined
+  * @param {int} starCount
+  * @param {string} country
+  */
+  convertToCurrency(starCount, country) {
+    switch(country) {
+      case 'India' : {
+        return starCount * 80;
+      }
+      case 'Turkmenistan' : {
+        return starCount * 4;
+      }
+      case 'Belarus' : {
+        return starCount * 2.1;
+      }
+      case 'Germany' : {
+        return starCount;
+      }
+    }
   }
 }
