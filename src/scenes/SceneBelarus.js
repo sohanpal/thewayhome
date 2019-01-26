@@ -148,10 +148,12 @@ export default class SceneBelarus extends Phaser.Scene {
       if (this.score < 50) {
           this.doFatCopSpeaking(this.fatCopFinalSpeech);
           this.fatCopLastSpeechTime = ts;
-          this.scene.start('Credits');
+          this.time.delayedCall(1000, () => {this.scene.start('Credits');}, [], this);
+          this.score = 0;
+      } else {
+        this.score -= 50;
       }
 
-      this.score -= 50;
 
       this.scoreText.text = "Belarussian rouble: " + this.score;
       this.fatCopLastJusticeTime = ts;

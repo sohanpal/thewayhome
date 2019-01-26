@@ -24,7 +24,7 @@ class Game extends Phaser.Game {
     this.scene.add('GermanySecret', SceneGermanySecret);
     this.scene.add('India', SceneIndia);
     this.scene.add('Turkmenistan', SceneTurkmenistan);
-    this.scene.start('Belarus');
+    this.scene.start('Boot');
   }
 }
 
