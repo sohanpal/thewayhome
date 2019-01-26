@@ -2,6 +2,7 @@ import 'phaser';
 import config from './config/config';
 import GameScene from './scenes/GameScene';
 import SceneGermany from './scenes/SceneGermany';
+import SceneGermanySecret from './scenes/SceneGermanySecret';
 import SceneIndia from './scenes/SceneIndia';
 import BootScene from './scenes/BootScene';
 import MenuScene from './scenes/MenuScene';
@@ -17,9 +18,10 @@ class Game extends Phaser.Game {
     this.scene.add('Credits', CreditsScene);
     this.scene.add('Game', GameScene);
     this.scene.add('Germany', SceneGermany);
+    this.scene.add('GermanySecret', SceneGermanySecret);
     this.scene.add('India', SceneIndia);
 
-    this.scene.start('Boot');
+    this.scene.start('Germany');
   }
 }
 

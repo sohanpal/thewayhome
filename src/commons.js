@@ -142,13 +142,14 @@ export default {
     });
 
     context.collectibles.getChildren().forEach((item, index) => {
-
       if (coordinates[index] === undefined) {
         item.destroy();
       } else {
         item.x = coordinates[index][0] * 64 - 32;
         item.y = coordinates[index][1] * 64 - 32 - 12;
       }
+
+      item.origIndex = index;
     });
 
     context.physics.add.collider(context.collectibles, context.platforms);
