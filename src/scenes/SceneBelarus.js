@@ -2,9 +2,9 @@ import 'phaser';
 import commons from '../commons.js';
 import config from '../config/config.js';
 
-export default class GameScene3 extends Phaser.Scene {
+export default class SceneBelarus extends Phaser.Scene {
   constructor () {
-    super('Game3');
+    super('Belarus');
     this.forbiddenAreas = new Set();
     this.tileWidth = 64;
     this.tileHeight = 64;

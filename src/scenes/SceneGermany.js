@@ -2,9 +2,11 @@ import 'phaser';
 import commons from '../commons.js';
 import config from '../config/config.js';
 
-export default class GameScene2 extends Phaser.Scene {
+export default class SceneGermany extends Phaser.Scene {
+
   constructor () {
-    super('Game2');
+    super('Germany');
+    this.nextScene = 'India';
   }
 
   init() {
@@ -18,6 +20,10 @@ export default class GameScene2 extends Phaser.Scene {
     console.log("preload game 2");
     commons.preload(this);
     this.load.image('background','assets/backgrounds/mountains_low.jpg');
+
+    this.load.image('shroom03','assets/tilesets/nature/flowers_plants/mushroom03.png');
+    this.load.image('stone01','assets/tilesets/nature/_rocks/stone01.png');
+    this.load.image('stone06','assets/tilesets/nature/_rocks/stone06.png');
   }
 
   /**
@@ -31,16 +37,25 @@ export default class GameScene2 extends Phaser.Scene {
     commons.renderTileSet(this.prepareTileSet(), this);
 
     commons.createPlayer(this);
-    this.score = 0;
+    this.score = this.registry.get('score');
 
-    this.finish = this.physics.add.image(1400, 600, 'star');
+    this.finish = this.physics.add.image(1380, 600, 'shroom03').setScale(.5);
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
-    this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
 
     this.physics.add.collider(this.finish, this.platforms);
-
     this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
+
+    this.collectibleCoordinates = [
+      [2, 5], [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
+      [4, 9], [6, 7], [8, 7], [10, 7],
+      [14, 5], [16, 5], [18, 5],
+      [19, 8], [21, 8], [23, 8],
+      [10, 12], [12, 12], [14, 12], [16, 12], [18, 12], [20, 12],
+      [12, 9], [14, 9], [17, 10],
+    ];
+    commons.prepareCollectibles(this.collectibleCoordinates, this);
   }
 
   /**
@@ -57,7 +72,8 @@ export default class GameScene2 extends Phaser.Scene {
   finishStage (player, star)
   {
       //this.star.disableBody(true, true);
-      this.scene.start('India');
+      this.registry.set('score', this.score);
+      this.scene.start('Credits');
       //this.score += 10;
       //this.scoreText.setText('Score: ' + this.score);
   }
@@ -88,6 +104,8 @@ export default class GameScene2 extends Phaser.Scene {
 
     tiles[9][8] = 'leafy03';
     tiles[10][8] = 'leafy03';
+    tiles[9][10] = 'leafy03';
+    tiles[10][10] = 'leafy03';
 
     for (let x = 1; x <= 4; x++) {
       tiles[x][6] = 'leafy03';
@@ -99,6 +117,40 @@ export default class GameScene2 extends Phaser.Scene {
       tiles[x][3] = 'leafy03';
     }
 
+    for (let x = 14; x <= 20; x++) {
+      tiles[x][6] = 'leafy03';
+    }
+
+    for (let x = 19; x <= 25; x++) {
+      tiles[x][9] = 'leafy03';
+    }
+
+    for (let x = 12; x <= 16; x++) {
+      tiles[x][10] = 'leafy03';
+    }
+
+    tiles[17][11] = 'leafy03';
+
+    tiles[7][7] = 'stone01';
+    tiles[20][5] = 'stone01';
+    tiles[13][12] = 'stone06';
+    tiles[1][5] = 'stone06';
+
     return tiles;
+  }
+
+  touchCollectible (player, touchedItem) {
+    this.sound.playAudioSprite('sfx', 'numkey');
+    touchedItem.disableBody(true, true);
+    this.score += 10;
+    this.scoreText.setText('Score: ' + this.score);
+
+    let prevSceneScore = this.registry.get('score');
+
+    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 10) {
+      this.sound.playAudioSprite('sfx', 'escape');
+      this.registry.set('score', this.score);
+      this.scene.start(this.nextScene);
+    }
   }
 };

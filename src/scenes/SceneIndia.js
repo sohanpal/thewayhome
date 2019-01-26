@@ -1,9 +1,12 @@
 import 'phaser';
 import commons from '../commons.js';
+import config from '../config/config.js';
 
-export default class SceneIndia extends Phaser.Scene {
+export default class GameScene2 extends Phaser.Scene {
+
   constructor () {
     super('India');
+    this.nextScene = 'Game';
   }
 
   init() {
@@ -15,7 +18,8 @@ export default class SceneIndia extends Phaser.Scene {
    */
   preload () {
     commons.preload(this);
-    this.load.image('background','assets/backgrounds/mountains.jpg');
+   
+    this.load.image('background','assets/backgrounds/taj.jpg');
   }
 
   /**
@@ -24,31 +28,25 @@ export default class SceneIndia extends Phaser.Scene {
   create () {
     commons.createPlatform(this);
     const background = this.add.image(800, 400, 'background');
-    background.setDisplaySize(1600, 800);
+    background.setDisplaySize(config.width, config.height);
 
-    // this.platforms added by commons.createPlatform()
-    this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-    this.platforms.create(600, 400, 'ground');
-    this.platforms.create(50, 250, 'ground');
-    this.platforms.create(750, 220, 'ground');
+    commons.renderTileSet(this.prepareTileSet(), this);
 
     commons.createPlayer(this);
-    this.score = 0;
+    this.score = this.registry.get('score');
 
-    this.stars = this.physics.add.group({
-        key: 'bomb',
-        repeat: 11,
-        setXY: { x: 12, y: 0, stepX: 70 }
-    });
+    this.finish = this.physics.add.image(1380, 600, 'star');
+    this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
-    this.stars.children.iterate(function (child) {
-        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-    });
+    this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
 
-    this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-    this.physics.add.collider(this.stars, this.platforms);
+    this.physics.add.collider(this.finish, this.platforms);
+    this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
 
-    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+    this.collectibleCoordinates = [
+      
+    ];
+    commons.prepareCollectibles(this.collectibleCoordinates, this);
   }
 
   /**
@@ -58,37 +56,37 @@ export default class SceneIndia extends Phaser.Scene {
    * @param {float} delta Delta time in microseconds.
    */
   update ()
-    {
-      if (this.cursors.left.isDown)
-        {
-            this.player.setVelocityX(-160);
+  {
+    commons.updateHandlerPlayerMovement(this);
+  }
 
-            this.player.anims.play('left', true);
-        }
-        else if (this.cursors.right.isDown)
-        {
-            this.player.setVelocityX(160);
+  finishStage (player, star)
+  {
+      //this.star.disableBody(true, true);
+      this.registry.set('score', this.score);
+      this.scene.start('Credits');
+      //this.score += 10;
+      //this.scoreText.setText('Score: ' + this.score);
+  }
 
-            this.player.anims.play('right', true);
-        }
-        else
-        {
-            this.player.setVelocityX(0);
+  prepareTileSet ()
+  {
+    let tiles = commons.getBasicSceneTileSet('hollow03');
+    return tiles;
+  }
 
-            this.player.anims.play('turn');
-        }
+  touchCollectible (player, touchedItem) {
+    this.sound.playAudioSprite('sfx', 'numkey');
+    touchedItem.disableBody(true, true);
+    this.score += 10;
+    this.scoreText.setText('Score: ' + this.score);
 
-        if (this.cursors.up.isDown && this.player.body.touching.down)
-        {
-            this.player.setVelocityY(-330);
-        }
+    let prevSceneScore = this.registry.get('score');
+
+    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 10) {
+      this.sound.playAudioSprite('sfx', 'escape');
+      this.registry.set('score', this.score);
+      this.scene.start(this.nextScene);
     }
-
-    collectStar (player, star)
-    {
-        //this.star.disableBody(true, true);
-        this.scene.start('Credits');
-        //this.score += 10;
-        //this.scoreText.setText('Score: ' + this.score);
-    }
+  }
 };

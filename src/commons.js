@@ -11,6 +11,15 @@ export default {
     context.load.image('leafy03','assets/tilesets/nature/_leafy_ground/leafy_ground03.png');
     context.load.image('ground01','assets/tilesets/nature/_ground/ground01.png');
 
+    for (var i = 1; i < 17; i++) { 
+      if (i < 10) {
+        context.load.image('hollow0'+i,'assets/tilesets/nature/_hollow/hollow0'+i+'.png');
+      } else {
+        context.load.image('hollow'+i,'assets/tilesets/nature/_hollow/hollow'+i+'.png');
+      }
+    }
+    context.load.image('hollow_ground','assets/tilesets/nature/_hollow/hollow middle blank.png');
+
     context.load.spritesheet('dude',
         'assets/dude.png',
         { frameWidth: 32, frameHeight: 48 }
@@ -58,12 +67,12 @@ export default {
   updateHandlerPlayerMovement(context) {
     if (context.cursors.left.isDown)
     {
-      context.player.setVelocityX(-160);
+      context.player.setVelocityX(-200);
       context.player.anims.play('left', true);
     }
     else if (context.cursors.right.isDown)
     {
-      context.player.setVelocityX(160);
+      context.player.setVelocityX(200);
       context.player.anims.play('right', true);
     }
     else
@@ -74,16 +83,16 @@ export default {
 
     if (context.cursors.up.isDown && context.player.body.touching.down)
     {
-      context.player.setVelocityY(-330);
+      context.player.setVelocityY(-450);
     }
   },
 
-  getBasicSceneTileSet() {
+  getBasicSceneTileSet(tile = 'leafy01') {
     let tiles = [];
     for (let x = 1; x <= 25; x++) {
       tiles[x] = [];
       // write ground-level blocks
-      tiles[x][13] = 'leafy01';
+      tiles[x][13] = tile;
     }
 
     return tiles;
@@ -127,5 +136,38 @@ export default {
         context.add.text(tileX-21, tileY-1, x + ' x ' + y, coordStyle2);
       }
     }
+  },
+
+  /**
+   * Draw collectible items at the given coordinates.
+   *
+   * Expects a handler context.touchCollectible to exist, which is called
+   * in collision of player and item.
+   */
+  prepareCollectibles(coordinates, context) {
+    context.collectibles = context.physics.add.group({
+      key: 'star',
+      frameQuantity: coordinates.length
+    });
+
+    context.collectibles.getChildren().forEach((item, index) => {
+
+      if (coordinates[index] === undefined) {
+        item.destroy();
+      } else {
+        item.x = coordinates[index][0] * 64 - 32;
+        item.y = coordinates[index][1] * 64 - 32 - 12;
+      }
+    });
+
+    context.physics.add.collider(context.collectibles, context.platforms);
+
+    context.physics.add.overlap(
+      context.player,
+      context.collectibles,
+      context.touchCollectible,
+      null,
+      context
+    );
   }
 }
