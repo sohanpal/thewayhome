@@ -11,10 +11,23 @@ export default {
     context.load.image('leafy03','assets/tilesets/nature/_leafy_ground/leafy_ground03.png');
     context.load.image('ground01','assets/tilesets/nature/_ground/ground01.png');
 
-    context.load.spritesheet('dude',
-        'assets/dude.png',
-        { frameWidth: 32, frameHeight: 48 }
+    context.load.spritesheet('hero_idle',
+        'assets/sprites/traveler/idle_slim.png',
+        { frameWidth: 54, frameHeight: 64}
     );
+    context.load.spritesheet('hero_fly_up',
+        'assets/sprites/traveler/fly_up_slim.png',
+        { frameWidth: 54, frameHeight: 64 }
+    );
+    context.load.spritesheet('hero_fly_down',
+        'assets/sprites/traveler/fly_down_slim.png',
+        { frameWidth: 54, frameHeight: 64 }
+    );
+    context.load.spritesheet('hero_run',
+        'assets/sprites/traveler/run_slim.png',
+        { frameWidth: 54, frameHeight: 64 }
+    );
+
     context.load.audioSprite('sfx', 'assets/audio/SoundEffects/fx_mixdown.json', [
         'assets/audio/SoundEffects/fx_mixdown.ogg',
         'assets/audio/SoundEffects/fx_mixdown.mp3'
@@ -26,55 +39,93 @@ export default {
   },
 
   createPlayer(context) {
-    context.player = context.physics.add.sprite(100, 450, 'dude');
+    context.player = context.physics.add.sprite(100, 450, 'hero_idle');
 
     context.player.setBounce(0.2);
     context.player.setCollideWorldBounds(true);
 
     context.anims.create({
-        key: 'left',
-        frames: context.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+        key: 'hero_idle',
+        frames: context.anims.generateFrameNumbers('hero_idle', { start: 0, end: 5 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    context.anims.create({
+        key: 'run',
+        frames: context.anims.generateFrameNumbers('hero_run', { start: 0, end: 5 }),
         frameRate: 10,
         repeat: -1
     });
 
     context.anims.create({
         key: 'turn',
-        frames: [ { key: 'dude', frame: 4 } ],
+        frames: [ { key: 'hero_idle', frame: 4 } ],
         frameRate: 20
     });
 
     context.anims.create({
-        key: 'right',
-        frames: context.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+        key: 'hero_fly_up',
+        frames: context.anims.generateFrameNumbers('hero_fly_up', { start: 0, end: 1 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    context.anims.create({
+        key: 'hero_fly_down',
+        frames: context.anims.generateFrameNumbers('hero_fly_down', { start: 0, end: 1 }),
         frameRate: 10,
         repeat: -1
     });
 
     context.cursors = context.input.keyboard.createCursorKeys();
-    context.physics.add.collider(context.player, context.platforms);
+    context.physics.add.collider(context.player, context.platforms, this.handlePlayerOnGround);
+  },
+
+  handlePlayerOnGround(player, platform) {
+    if (player.isFlying !== false) {
+      player.anims.play('hero_idle', true);
+      player.isFlying = false
+      player.setVelocityY(0);
+    } else if (player.body.velocity.x == 0) {
+      player.anims.play('hero_idle', true);
+    }
   },
 
   updateHandlerPlayerMovement(context) {
+    if (context.cursors.up.isDown && context.player.body.touching.down)
+    {
+      context.player.anims.play('hero_fly_up', true);
+      context.player.setVelocityY(-450);
+      context.player.isFlying = 'up';
+    } else if (context.player.isFlying != false) {
+      if(context.player.isFlying == 'up' && context.player.body.velocity.y > 0) {
+        context.player.isFlying = 'down';
+        context.player.anims.play('hero_fly_down', true);
+      }
+    }
+
     if (context.cursors.left.isDown)
     {
-      context.player.setVelocityX(-200);
-      context.player.anims.play('left', true);
+      context.player.setVelocityX(-250);
+      context.player.flipX = true;
+
+      if(!context.player.isFlying) {
+        context.player.anims.play('run', true);
+      }
     }
     else if (context.cursors.right.isDown)
     {
-      context.player.setVelocityX(200);
-      context.player.anims.play('right', true);
+      context.player.setVelocityX(250);
+      context.player.flipX = false;
+
+      if(!context.player.isFlying) {
+        context.player.anims.play('run', true);
+      }
     }
     else
     {
       context.player.setVelocityX(0);
-      context.player.anims.play('turn');
-    }
-
-    if (context.cursors.up.isDown && context.player.body.touching.down)
-    {
-      context.player.setVelocityY(-450);
     }
   },
 
