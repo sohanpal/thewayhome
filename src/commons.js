@@ -6,6 +6,10 @@ export default {
     context.load.image('ground', 'assets/platform.png');
     context.load.image('star', 'assets/star.png');
     context.load.image('bomb', 'assets/bomb.png');
+    context.load.image('full_ground','assets/tilesets/nature/_ground/ground05.png');
+    context.load.image('leafy01','assets/tilesets/nature/_leafy_ground/leafy_ground01.png');
+    context.load.image('leafy03','assets/tilesets/nature/_leafy_ground/leafy_ground03.png');
+    context.load.image('ground01','assets/tilesets/nature/_ground/ground01.png');
 
     context.load.spritesheet('dude',
         'assets/dude.png',
@@ -71,6 +75,57 @@ export default {
     if (context.cursors.up.isDown && context.player.body.touching.down)
     {
       context.player.setVelocityY(-330);
+    }
+  },
+
+  getBasicSceneTileSet() {
+    let tiles = [];
+    for (let x = 1; x <= 25; x++) {
+      tiles[x] = [];
+      // write ground-level blocks
+      tiles[x][13] = 'leafy01';
+    }
+
+    return tiles;
+  },
+
+  renderTileSet(tiles, context) {
+    for (let x = 1; x <= tiles.length; x++) {
+      if (tiles[x] === undefined) { continue; }
+      if (tiles[x].length === 0) { continue; }
+
+      for (let y = 1; y <= tiles[y].length; y++) {
+        if (tiles[x][y] === undefined) { continue; }
+        let tileX = x * 64 - 32;
+        let tileY = y * 64 - 32 - 12;
+        let tileType = tiles[x][y];
+        context.fullGroundBlock = context.platforms.create(tileX, tileY, tileType).setScale(.5).refreshBody();
+      }
+    }
+
+    // @todo remove
+    this.renderCoordsHelper(tiles, context);
+  },
+
+  renderCoordsHelper(tiles, context) {
+    const coordStyle = {
+      fill: '#000000',
+      fontSize: '10px',
+      align: 'left'
+    };
+    const coordStyle2 = {
+      fill: '#FFFFFF',
+      fontSize: '10px',
+      align: 'left'
+    };
+
+    for (let x = 1; x <= tiles.length; x++) {
+      for (let y = 1; y <= tiles[y].length; y++) {
+        let tileX = x * 64 - 32;
+        let tileY = y * 64 - 32 - 12;
+        context.add.text(tileX-20, tileY, x + ' x ' + y, coordStyle);
+        context.add.text(tileX-21, tileY-1, x + ' x ' + y, coordStyle2);
+      }
     }
   }
 }

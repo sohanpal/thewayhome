@@ -27,29 +27,19 @@ export default class GameScene2 extends Phaser.Scene {
     const background = this.add.image(800, 400, 'background');
     background.setDisplaySize(config.width, config.height);
 
-    // this.platforms added by commons.createPlatform()
-    this.platforms.create(config.width/2, config.height+20, 'ground').setScale(4).refreshBody();
-    this.platforms.create(600, 400, 'ground');
-    this.platforms.create(50, 250, 'ground');
-    this.platforms.create(750, 220, 'ground');
+    commons.renderTileSet(this.prepareTileSet(), this);
 
     commons.createPlayer(this);
     this.score = 0;
 
-    this.stars = this.physics.add.group({
-        key: 'bomb',
-        repeat: 11,
-        setXY: { x: 12, y: 0, stepX: 70 }
-    });
-
-    this.stars.children.iterate(function (child) {
-        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-    });
+    this.finish = this.physics.add.image(1400, 600, 'star');
+    this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
     this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-    this.physics.add.collider(this.stars, this.platforms);
 
-    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+    this.physics.add.collider(this.finish, this.platforms);
+
+    this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
   }
 
   /**
@@ -63,11 +53,51 @@ export default class GameScene2 extends Phaser.Scene {
     commons.updateHandlerPlayerMovement(this);
   }
 
-  collectStar (player, star)
+  finishStage (player, star)
   {
       //this.star.disableBody(true, true);
-      this.scene.start('Credits');
+      this.scene.start('India');
       //this.score += 10;
       //this.scoreText.setText('Score: ' + this.score);
+  }
+
+  prepareTileSet ()
+  {
+    let tiles = commons.getBasicSceneTileSet();
+
+    tiles[1][13] = 'full_ground';
+    tiles[1][12] = 'full_ground';
+    tiles[1][11] = 'leafy01';
+    tiles[2][12] = 'leafy01';
+    tiles[2][13] = 'full_ground';
+    tiles[3][12] = 'leafy01';
+    tiles[3][13] = 'full_ground';
+
+    for (let y = 9; y <= 13; y++) {
+      for (let x = 6; x <= 8; x++) {
+        tiles[x][y] = 'full_ground';
+      }
+    }
+    tiles[8][8] = 'leafy01';
+    tiles[7][8] = 'leafy01';
+    tiles[6][8] = 'leafy01';
+    tiles[5][9] = 'leafy01';
+    tiles[5][10] = 'ground01';
+    tiles[4][10] = 'leafy03';
+
+    tiles[9][8] = 'leafy03';
+    tiles[10][8] = 'leafy03';
+
+    for (let x = 1; x <= 4; x++) {
+      tiles[x][6] = 'leafy03';
+    }
+
+    tiles[7][4] = 'leafy03';
+
+    for (let x = 10; x <= 15; x++) {
+      tiles[x][3] = 'leafy03';
+    }
+
+    return tiles;
   }
 };
