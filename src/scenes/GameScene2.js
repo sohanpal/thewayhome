@@ -3,8 +3,10 @@ import commons from '../commons.js';
 import config from '../config/config.js';
 
 export default class GameScene2 extends Phaser.Scene {
+
   constructor () {
     super('Game2');
+    this.nextScene = 'India';
   }
 
   init() {
@@ -38,8 +40,17 @@ export default class GameScene2 extends Phaser.Scene {
     this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
     this.physics.add.collider(this.finish, this.platforms);
-
     this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
+
+    this.collectibleCoordinates = [
+      [2, 5], [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
+      [4, 9], [6, 7], [8, 7], [10, 7],
+      [14, 5], [16, 5], [18, 5],
+      [19, 8], [21, 8], [23, 8],
+      [10, 12], [12, 12], [14, 12], [16, 12], [18, 12], [20, 12],
+      [12, 9], [14, 9], [17, 10],
+    ];
+    commons.prepareCollectibles(this.collectibleCoordinates, this);
   }
 
   /**
@@ -115,5 +126,17 @@ export default class GameScene2 extends Phaser.Scene {
     tiles[17][11] = 'leafy03'
 
     return tiles;
+  }
+
+  touchCollectible (player, touchedItem) {
+    this.sound.playAudioSprite('sfx', 'numkey');
+    touchedItem.disableBody(true, true);
+    this.score += 10;
+    this.scoreText.setText('Score: ' + this.score);
+
+    if (this.score == this.collectibleCoordinates.length * 10) {
+      this.sound.playAudioSprite('sfx', 'escape');
+      this.scene.start(this.nextScene);
+    }
   }
 };

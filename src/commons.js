@@ -127,5 +127,38 @@ export default {
         context.add.text(tileX-21, tileY-1, x + ' x ' + y, coordStyle2);
       }
     }
+  },
+
+  /**
+   * Draw collectible items at the given coordinates.
+   *
+   * Expects a handler context.touchCollectible to exist, which is called
+   * in collision of player and item.
+   */
+  prepareCollectibles(coordinates, context) {
+    context.collectibles = context.physics.add.group({
+      key: 'star',
+      frameQuantity: coordinates.length
+    });
+
+    context.collectibles.getChildren().forEach((item, index) => {
+
+      if (coordinates[index] === undefined) {
+        item.destroy();
+      } else {
+        item.x = coordinates[index][0] * 64 - 32;
+        item.y = coordinates[index][1] * 64 - 32 - 12;
+      }
+    });
+
+    context.physics.add.collider(context.collectibles, context.platforms);
+
+    context.physics.add.overlap(
+      context.player,
+      context.collectibles,
+      context.touchCollectible,
+      null,
+      context
+    );
   }
 }
