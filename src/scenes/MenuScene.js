@@ -14,7 +14,7 @@ export default class MenuScene extends Phaser.Scene {
    * Create main menu.
    */
   create() {
-    // GGJ logo
+    // "The way back home" logo
     const logo = this.add.image(config.width/2, config.height/2, 'logo');
     logo.setScale(.75);
     const menuStyle = {

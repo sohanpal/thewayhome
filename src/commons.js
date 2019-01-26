@@ -11,6 +11,15 @@ export default {
     context.load.image('leafy03','assets/tilesets/nature/_leafy_ground/leafy_ground03.png');
     context.load.image('ground01','assets/tilesets/nature/_ground/ground01.png');
 
+    for (var i = 1; i < 17; i++) {
+      if (i < 10) {
+        context.load.image('hollow0'+i,'assets/tilesets/nature/_hollow/hollow0'+i+'.png');
+      } else {
+        context.load.image('hollow'+i,'assets/tilesets/nature/_hollow/hollow'+i+'.png');
+      }
+    }
+    context.load.image('hollow_ground','assets/tilesets/nature/_hollow/hollow middle blank.png');
+
     context.load.spritesheet('hero_idle',
         'assets/sprites/traveler/idle_slim.png',
         { frameWidth: 54, frameHeight: 64}
@@ -129,12 +138,12 @@ export default {
     }
   },
 
-  getBasicSceneTileSet() {
+  getBasicSceneTileSet(tile = 'leafy01') {
     let tiles = [];
     for (let x = 1; x <= 25; x++) {
       tiles[x] = [];
       // write ground-level blocks
-      tiles[x][13] = 'leafy01';
+      tiles[x][13] = tile;
     }
 
     return tiles;
@@ -155,7 +164,7 @@ export default {
     }
 
     // @todo remove
-    this.renderCoordsHelper(tiles, context);
+    //this.renderCoordsHelper(tiles, context);
   },
 
   renderCoordsHelper(tiles, context) {
