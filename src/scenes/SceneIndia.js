@@ -6,7 +6,7 @@ export default class GameScene2 extends Phaser.Scene {
 
   constructor () {
     super('India');
-    this.nextScene = 'Game';
+    this.nextScene = 'Turkmenistan';
   }
 
   init() {
@@ -50,7 +50,7 @@ export default class GameScene2 extends Phaser.Scene {
     this.finish = this.physics.add.image(1380, 600, 'star');
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
-    this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
+    this.scoreText = this.add.text(16, 16, 'Indian Rupee: ' + commons.convertToCurrency(this.score, 'India'), { fontSize: '32px', fill: '#FF9933' });
 
     this.physics.add.collider(this.finish, this.platforms);
     this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
@@ -202,8 +202,8 @@ export default class GameScene2 extends Phaser.Scene {
   touchCollectible (player, touchedItem) {
     this.sound.playAudioSprite('sfx', 'ping');
     touchedItem.disableBody(true, true);
-    this.score += 10;
-    this.scoreText.setText('Score: ' + this.score);
+    this.score += 1;
+    this.scoreText.setText('Indian Rupee: ' + commons.convertToCurrency(this.score, 'India'));
 
     let prevSceneScore = this.registry.get('score');
 
