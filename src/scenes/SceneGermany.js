@@ -2,10 +2,10 @@ import 'phaser';
 import commons from '../commons.js';
 import config from '../config/config.js';
 
-export default class GameScene2 extends Phaser.Scene {
+export default class SceneGermany extends Phaser.Scene {
 
   constructor () {
-    super('Game2');
+    super('Germany');
     this.nextScene = 'India';
   }
 
