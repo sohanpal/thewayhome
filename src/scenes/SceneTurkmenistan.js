@@ -19,14 +19,13 @@ export default class SceneTurkmenistan extends Phaser.Scene {
   preload () {
     commons.preload(this);
     this.load.image('desert_background','assets/backgrounds/1600x800_Desert_Sanjar.png');
-
-    this.load.image('shroom03','assets/tilesets/nature/flowers_plants/mushroom03.png');
-    this.load.image('stone01','assets/tilesets/nature/_rocks/stone01.png');
-    this.load.image('stone06','assets/tilesets/nature/_rocks/stone06.png');
     this.load.image('warning_board','assets/tilesets/nature/signs/board08.png');
+    this.load.image('map_board','assets/tilesets/nature/signs/board09.png');
     this.load.image('lava','assets/tilesets/nature/_lava/lava 1.png');
     this.load.image('sand','assets/tilesets/nature/sand/slice05_05_128.png');
     this.load.image('sand_ground','assets/tilesets/nature/sand/slice27_27_128.png');
+    this.load.image('grass','assets/tilesets/nature/_grass/grass07.png');
+    this.load.image('stone06','assets/tilesets/nature/_rocks/stone06.png');
   }
 
   /**
@@ -44,8 +43,8 @@ export default class SceneTurkmenistan extends Phaser.Scene {
 
     this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
 
-    // Mushroom, when you touch it the game ends
-    this.finish = this.physics.add.image(1380, 600, 'shroom03').setScale(.5);
+    // Map board, when you touch you go to the next level
+    this.finish = this.physics.add.image(1350, 10, 'map_board').setScale(.7);
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     this.physics.add.collider(this.finish, this.platforms);
     this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
@@ -56,14 +55,15 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     this.physics.add.collider(this.w_board, this.platforms);
 
     this.collectibleCoordinates = [
-      [2, 5], [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
+      [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
       [4, 9], [6, 7], [8, 7], [10, 7],
       [14, 5], [16, 5], [18, 5],
       [19, 8], [21, 8], [23, 8],
       [10, 12], [12, 12], [14, 12], [16, 12], [18, 12], [20, 12],
       [12, 9], [14, 9], [17, 10],
     ];
-    commons.prepareCollectibles(this.collectibleCoordinates, this);
+    //@odo uncomment
+    //commons.prepareCollectibles(this.collectibleCoordinates, this);
 
     // Create lava tileset
     this.lava = this.physics.add.staticGroup();
@@ -71,14 +71,14 @@ export default class SceneTurkmenistan extends Phaser.Scene {
       let tileX = x * 64 - 32;
       let tileY = 13 * 64 - 32 - 12;
       this.fullLavaBlock = this.lava.create(tileX, tileY, 'lava').setScale(.5).refreshBody();
+      this.physics.add.overlap(
+        this.player,
+        this.fullLavaBlock,
+        this.touchLava,
+        null,
+        this
+      );
     }
-    this.physics.add.overlap(
-      this.player,
-      this.fullLavaBlock,
-      this.touchLava,
-      null,
-      this
-    );
   }
 
   /**
@@ -104,7 +104,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
   {
       //this.star.disableBody(true, true);
       this.registry.set('score', this.score);
-      this.scene.start('Credits');
+      this.scene.start(this.nextScene);
       //this.score += 10;
       //this.scoreText.setText('Score: ' + this.score);
   }
@@ -117,13 +117,28 @@ export default class SceneTurkmenistan extends Phaser.Scene {
       delete tiles[x][13];
     }
 
-    //Put sandy tiles instead
+    /**
+     * Put sandy tiles instead
+     */
+    // Ground level before lava
     for (let x = 1; x <= 13; x++) {
       tiles[x][13] = 'sand';
     }
+    // Ground level after lava
     for (let x = 21; x <= 25; x++) {
       tiles[x][13] = 'sand';
     }
+    // Blocks with a way to the next level
+    tiles[23][7] = 'sand';
+    tiles[22][7] = 'sand';
+
+    tiles[25][8] = 'sand';
+
+    tiles[17][11] = 'sand';
+    tiles[18][11] = 'sand';
+    tiles[25][10] = 'sand';
+    tiles[21][12] = 'grass';
+    
 
     // for (let y = 10; y <= 13; y++) {
     //   for (let x = 6; x <= 8; x++) {
