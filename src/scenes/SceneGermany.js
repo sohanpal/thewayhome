@@ -47,19 +47,32 @@ export default class SceneGermany extends Phaser.Scene {
       this.physics.add.overlap(this.player, this.finish, this.goToSecret, null, this);
     }
 
-    if(this.registry.get('germanySavedCollectibles')) {
+    this.collectibleCoordinates = [
+      [2, 5], [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
+      [4, 9], [6, 7], [8, 7], [10, 7],
+      [14, 5], [16, 5], [18, 5],
+      [19, 8], [21, 8], [23, 8],
+      [10, 12], [12, 12], [14, 12], [16, 12], [18, 12], [20, 12],
+      [12, 9], [14, 9], [17, 10],
+    ];
+    if(this.registry.get('collectedCollectibles')) {
       // secret was finished. recreate only collectibles not collected before
-      this.collectibleCoordinates = this.registry.get('germanySavedCollectibles');
+      this.collectedCollectibles = this.registry.get('collectedCollectibles');
     } else {
-      this.collectibleCoordinates = [
-        [2, 5], [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
-        [4, 9], [6, 7], [8, 7], [10, 7],
-        [14, 5], [16, 5], [18, 5],
-        [19, 8], [21, 8], [23, 8],
-        [10, 12], [12, 12], [14, 12], [16, 12], [18, 12], [20, 12],
-        [12, 9], [14, 9], [17, 10],
-      ];
+      this.collectedCollectibles = [];
     }
+
+    let copyItems = [];
+
+    this.collectedCollectibles.forEach((item, index) => {
+      delete this.collectibleCoordinates[item];
+    });
+    this.collectibleCoordinates.forEach((item, index) => {
+      copyItems.push(item);
+    });
+
+    this.collectibleCoordinates = copyItems;
+
     commons.prepareCollectibles(this.collectibleCoordinates, this);
   }
 
@@ -148,11 +161,12 @@ export default class SceneGermany extends Phaser.Scene {
     this.score += 10;
     this.scoreText.setText('Score: ' + this.score);
 
-    delete this.collectibleCoordinates[touchedItem.origIndex];
+    this.collectedCollectibles.push(touchedItem.origIndex);
+    this.registry.set('collectedCollectibles', this.collectedCollectibles);
 
     let prevSceneScore = this.registry.get('score');
 
-    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 10) {
+    if (Object.keys(this.collectibleCoordinates).length <= 0) {
       this.sound.playAudioSprite('sfx', 'escape');
       this.registry.set('score', this.score);
       this.scene.start(this.nextScene);
