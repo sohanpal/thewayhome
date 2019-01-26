@@ -1,5 +1,6 @@
 import 'phaser';
- 
+import config from '../config/config.js';
+
 export default class CreditsScene extends Phaser.Scene {
   constructor () {
     super('Credits');
@@ -7,7 +8,7 @@ export default class CreditsScene extends Phaser.Scene {
  
   preload () {
   }
- 
+
   /**
    * Dumps the credits.
    */
@@ -17,9 +18,9 @@ export default class CreditsScene extends Phaser.Scene {
       fontSize: '50px',
       align: 'center'
     };
-    this.add.text(150, 140, 'Particles hit:', menuStyle);
-    this.add.text(500, 140, this.registry.get('points'), menuStyle);
-    const btnStartGame = this.add.text(100, 270, 'Thank you for playing\nClick on text to return\nto Mainmenu', menuStyle);
+    this.add.text(config.width/10, config.height/4, 'Your score:', menuStyle);
+    this.add.text(config.width/3 , config.height/4, this.registry.get('score'), menuStyle);
+    const btnStartGame = this.add.text(config.width/2 - 500, config.height/2, 'Thank you for playing.\nClick on text to return to Mainmenu', menuStyle);
     btnStartGame.setInteractive();
     btnStartGame.on('pointerdown', () => {
       this.scene.start('Menu');

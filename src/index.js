@@ -10,15 +10,15 @@ import CreditsScene from './scenes/CreditsScene';
 class Game extends Phaser.Game {
   constructor () {
     super(config);
+    this.registry.set('score', 0);
+
     this.scene.add('Boot', BootScene);
     this.scene.add('Menu', MenuScene);
     this.scene.add('Credits', CreditsScene);
     this.scene.add('Game', GameScene);
     this.scene.add('Game2', GameScene2);
     this.scene.add('India', SceneIndia);
-    this.scene.start('Game2');
-
-    this.registry.set('score', 0);
+    this.scene.start('Boot');
   }
 }
 
