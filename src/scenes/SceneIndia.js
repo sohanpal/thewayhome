@@ -48,21 +48,14 @@ export default class GameScene2 extends Phaser.Scene {
     commons.createPlayer(this);
     this.score = this.registry.get('score');
     this.scoreText = this.add.text(16, 16, 'Indian Rupees : ' + commons.convertToCurrency(this.score, 'India'), { fontSize: '32px', fill: '#ffc73b' });
-
-    this.finish = this.physics.add.image(1380, 600, 'star');
-    this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
-    this.scoreText = this.add.text(16, 16, 'Indian Rupee: ' + commons.convertToCurrency(this.score, 'India'), { fontSize: '32px', fill: '#FF9933' });
-
-    this.physics.add.collider(this.finish, this.platforms);
-    this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
-
+    
    this.collectibleCoordinates = [
       [1, 4], [2, 4], [3, 3], [9, 6], [8, 12], [12, 2], [8, 12], [9, 12],
       [10, 12], [23, 8], [21, 8], [25, 8], [22, 6], [24, 6], [1,9], [4, 3], 
       [5, 4],[6, 5], [20, 4],[23, 4], [6, 10], [10, 10], [13, 10], [14,8]
     ];
 
+    this.itemsTouched = 0;
     // Create water tileset
     this.water = this.physics.add.staticGroup();
     for (let x = 17; x <= 18; x++) {
@@ -203,14 +196,11 @@ export default class GameScene2 extends Phaser.Scene {
   touchCollectible (player, touchedItem) {
     this.sound.playAudioSprite('sfx', 'ping');
     touchedItem.disableBody(true, true);
+    this.itemsTouched += 1;
     this.score += 1;
     this.scoreText.setText('Indian Rupee: ' + commons.convertToCurrency(this.score, 'India'));
-    this.collectibleCoordinates.splice(touchedItem.origIndex, 1); 
-    //delete this.collectibleCoordinates[touchedItem.origIndex];
     let prevSceneScore = this.registry.get('score');
-    console.log(this.collectibleCoordinates);
-    console.log(this.collectibleCoordinates.length);
-    if (this.collectibleCoordinates.length == 0) {
+    if (this.collectibleCoordinates.length == this.itemsTouched) {
         this.finish = this.physics.add.image(1380, 600, 'end_sign');
         this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
         this.physics.add.collider(this.finish, this.platforms);
