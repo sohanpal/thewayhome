@@ -38,7 +38,7 @@ export default class CreditsScene extends Phaser.Scene {
       this.add.text(200, config.height/8, this.registry.get('end_game_text'), creditTextStyle);
     }
 
-    this.add.text(640, config.height/4 + 20, 'Yo have got ' + this.registry.get('score') + ' €', scoreTextStyle);
+    this.add.text(640, config.height/4 + 20, 'You have got ' + this.registry.get('score') + ' €', scoreTextStyle);
 
     let creditText = 'Thank you for playing.\n' +
       '\nThis game was made by Tino Dietel,\nRustam Miyliyev, Jasbir Singh\n' +

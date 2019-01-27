@@ -82,6 +82,6 @@ export default class SceneGermany extends Phaser.Scene {
     this.sound.playAudioSprite('sfx', 'numkey');
     touchedItem.disableBody(true, true);
     this.score += 1;
-    this.scoreText.setText('Score: ' + this.score);
+    this.scoreText.setText('Euros: ' + this.score);
   }
 };

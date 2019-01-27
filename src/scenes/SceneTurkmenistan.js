@@ -95,12 +95,14 @@ export default class SceneTurkmenistan extends Phaser.Scene {
   // event handler for player touching lava
   touchLava ()
   {
+    this.sound.playAudioSprite('sfx', 'meow');
     this.registry.set('score', this.score - 10);
     this.player.body.reset(100, 100);
   }
 
   finishStage (player, star)
   {
+    this.sound.playAudioSprite('sfx', 'escape');
     this.registry.set('score', this.score);
     this.scene.start(this.nextScene);
   }
@@ -154,13 +156,5 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     touchedItem.disableBody(true, true);
     this.score += 1;
     this.scoreText.setText('Turkmenistan manat: ' + commons.convertToCurrency(this.score, 'Turkmenistan'));
-
-    let prevSceneScore = this.registry.get('score');
-
-    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 1) {
-      this.sound.playAudioSprite('sfx', 'escape');
-      this.registry.set('score', this.score);
-      this.scene.start(this.nextScene);
-    }
   }
 };
