@@ -74,7 +74,7 @@ export default class SceneGermany extends Phaser.Scene {
 
     this.collectibleCoordinates = copyItems;
 
-    commons.prepareCollectibles(this.collectibleCoordinates, this);
+    commons.prepareCollectibles(this.collectibleCoordinates, this, 'euro_coin');
 
     // Map board, when you touch you go to the next level
     this.finish = this.physics.add.image(1500, 60, 'map_board').setScale(.7);
@@ -173,7 +173,7 @@ export default class SceneGermany extends Phaser.Scene {
   touchCollectible (player, touchedItem) {
     this.sound.playAudioSprite('sfx', 'numkey');
     touchedItem.disableBody(true, true);
-    this.score += 10;
+    this.score += 1;
     this.scoreText.setText('Score: ' + this.score);
 
     this.collectedCollectibles.push(touchedItem.origIndex);

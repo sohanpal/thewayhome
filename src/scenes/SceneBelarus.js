@@ -5,6 +5,8 @@ import config from '../config/config.js';
 export default class SceneBelarus extends Phaser.Scene {
   constructor () {
     super('Belarus');
+    
+    this.gameEnded = false;
 
     this.tileWidth = 64;
     this.tileHeight = 64;
@@ -17,6 +19,8 @@ export default class SceneBelarus extends Phaser.Scene {
     this.collectables = [];
     this.fatCop = {};
     this.airportWarningText = {};
+
+    this.bynEurConvertationRate = 2.5;
 
     this.fatCopAngrySpeech = [
         'You are not supposed to make photos\nof this public toilet!\nPay the fee!',
@@ -74,6 +78,7 @@ export default class SceneBelarus extends Phaser.Scene {
     
     this.load.image('minsk_airport','assets/sprites/minsk_airport_sm.png');
     this.load.image('boduny','assets/sprites/boduny.png');
+    this.load.image('map_board','assets/tilesets/nature/signs/board09.png');
 
     this.load.audio('fu', 'assets/audio/SoundEffects/fu_easy.mp3');
     this.load.audio('luka', 'assets/audio/SoundEffects/luka.mp3');
@@ -99,6 +104,7 @@ export default class SceneBelarus extends Phaser.Scene {
 
     this.add.image(40, 27, 'bel_currency');
     this.add.image(1000, 218, 'boduny');
+    this.w_board = this.add.image(1220, 70, 'map_board').setScale(.7);
 
     let airport = this.physics.add.image(1410, 87, 'minsk_airport');
     airport.body.setAllowGravity(false);
@@ -113,7 +119,7 @@ export default class SceneBelarus extends Phaser.Scene {
 
   updateScore() {
     if (this.scoreText.x == undefined) {
-        this.score = this.registry.get('score')
+        this.score = this.registry.get('score') == undefined ? 0 : this.registry.get('score') * this.bynEurConvertationRate; 
         this.scoreText = this.add.text(76, 16, 'Belarussian rouble: ' + this.score, { fontSize: '24px', fill: '#000'});
     } else {
         this.scoreText.text = 'Belarussian rouble: ' + this.score;
@@ -131,8 +137,9 @@ export default class SceneBelarus extends Phaser.Scene {
 
   processAirportCollision() {
       if (this.score >= 50) {
+        this.score -= 50;
+        this.registry.set('score', this.score / this.bynEurConvertationRate);
         this.scene.start('Germany');
-        this.registry.set('score', this.score);
       } else {
         this.airportWarningText = this.add.text(1410, 50, 'get 50 roubles to\nfly further!', { fontSize: '16px', fill: '#000'});
       }
@@ -170,8 +177,10 @@ export default class SceneBelarus extends Phaser.Scene {
     if (this.score < 50) {
         this.doFatCopSpeaking(this.fatCopFinalSpeech);
         this.fatCopLastSpeechTime = ts;
+        this.registry.set('end_game_text', 'GONNA BE DEPORTED FROM BELARUS!!\nHAHAHA!!! LOOSER!');
+        this.gameEnded = true;
+        this.player.body.setVelocityX(0);
         this.time.delayedCall(5000, () => {this.scene.start('Credits');}, [], this);
-        this.fatCop.body.setVelocityX(0);
         this.score = 0;
       } else {
         this.score -= 50;
@@ -193,6 +202,12 @@ export default class SceneBelarus extends Phaser.Scene {
    */
   update (time, delta)
   {
+      if (this.gameEnded == true) {
+        this.fatCop.body.setVelocityX(0);
+        this.player.body.setVelocityX(0);
+        return;
+      }
+
       commons.updateHandlerPlayerMovement(this);
       this.checkFatCopSpeaking();
       
@@ -305,7 +320,7 @@ export default class SceneBelarus extends Phaser.Scene {
   isTileReachableFromPlatform(x, y) {
       for (let y_axis = 0; y_axis <= y; y_axis++) {
           for (let x_axis = x - 2; x_axis < x + 2; x_axis++) {
-            if (this.platformTiles[x_axis] != undefined && this.platformTiles[x_axis][y_axis] != undefined) {
+            if (this.platformTiles[x_axis] != undefined && this.platformTiles[x_axis][y_axis] != undefined && x_axis != x) {
                 return true;
             }
           }
