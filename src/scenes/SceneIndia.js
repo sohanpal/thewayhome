@@ -49,10 +49,6 @@ export default class GameScene2 extends Phaser.Scene {
     this.score = this.registry.get('score');
     this.scoreText = this.add.text(16, 16, 'Indian Rupees : ' + commons.convertToCurrency(this.score, 'India'), { fontSize: '32px', fill: '#ffc73b' });
 
-<<<<<<< HEAD
-    this.collectibleCoordinates = [
-       [6, 10], [10, 10], [13, 10], [14,8]
-=======
     this.finish = this.physics.add.image(1380, 600, 'star');
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
@@ -65,7 +61,6 @@ export default class GameScene2 extends Phaser.Scene {
       [1, 4], [2, 4], [3, 3], [9, 6], [8, 12], [12, 2], [8, 12], [9, 12],
       [10, 12], [23, 8], [21, 8], [25, 8], [22, 6], [24, 6], [1,9], [4, 3], 
       [5, 4],[6, 5], [20, 4],[23, 4], [6, 10], [10, 10], [13, 10], [14,8]
->>>>>>> e739d881ff91cd4a3f4076f7340ab53879af230d
     ];
 
     // Create water tileset
