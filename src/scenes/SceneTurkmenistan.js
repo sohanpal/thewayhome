@@ -137,6 +137,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     tiles[17][11] = 'sand';
     tiles[18][11] = 'sand';
     tiles[25][10] = 'sand';
+    tiles[24][10] = 'sand';
     tiles[21][12] = 'grass';
     
 
