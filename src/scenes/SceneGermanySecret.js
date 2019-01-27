@@ -50,7 +50,7 @@ export default class SceneGermany extends Phaser.Scene {
       [3, 7], [5, 7], [7, 7], [9, 7], [11, 7], [13, 7],
       [15, 7], [17, 7], [19, 7], [21, 7], [23, 7],
     ];
-    commons.prepareCollectibles(this.collectibleCoordinates, this);
+    commons.prepareCollectibles(this.collectibleCoordinates, this, 'euro_coin');
   }
 
   /**
@@ -81,7 +81,7 @@ export default class SceneGermany extends Phaser.Scene {
   touchCollectible (player, touchedItem) {
     this.sound.playAudioSprite('sfx', 'numkey');
     touchedItem.disableBody(true, true);
-    this.score += 10;
+    this.score += 1;
     this.scoreText.setText('Score: ' + this.score);
   }
 };

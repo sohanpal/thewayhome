@@ -5,6 +5,7 @@ export default {
     context.load.image('sky','assets/sky.png');
     context.load.image('ground', 'assets/platform.png');
     context.load.image('star', 'assets/star.png');
+    context.load.image('euro_coin', 'assets/currencies/euro_coin.png');
     context.load.image('bomb', 'assets/bomb.png');
     context.load.image('full_ground','assets/tilesets/nature/_ground/ground05.png');
     context.load.image('leafy01','assets/tilesets/nature/_leafy_ground/leafy_ground01.png');
