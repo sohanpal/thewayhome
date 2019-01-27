@@ -221,9 +221,14 @@ export default class SceneBelarus extends Phaser.Scene {
           this.fatCopSpeechElement.y = this.fatCop.body.y - 50;
       }
 
-    if (this.fatCop.x >= 1000 || this.fatCop.x <= 250) {
-        this.fatCop.body.setVelocityX(-this.fatCop.body.velocity.x);
+    if (this.fatCop.x > 1000) {
+        this.fatCop.body.setVelocityX(-100);
         this.fatCop.scaleX = this.fatCop.scaleX * -1;
+    }
+
+    if (this.fatCop.x < 250) {
+        this.fatCop.scaleX = this.fatCop.scaleX * -1;
+        this.fatCop.body.setVelocityX(100);
     }
   }
 

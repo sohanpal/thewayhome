@@ -38,8 +38,7 @@ export default class SceneGermany extends Phaser.Scene {
 
     commons.createPlayer(this);
     this.score = this.registry.get('score');
-
-    this.scoreText = this.add.text(16, 16, 'Euros: ' + this.score, { fontSize: '32px', fill: '#000' });
+    this.scoreText = this.add.text(16, 16, 'Euro: ' + this.score, { fontSize: '32px', fill: '#000' });
 
     if (!this.registry.get('germanySecretPassed')) {
       this.finish = this.physics.add.image(1500, 720, 'shroom03').setScale(.5);
@@ -174,8 +173,7 @@ export default class SceneGermany extends Phaser.Scene {
     this.sound.playAudioSprite('sfx', 'ping');
     touchedItem.disableBody(true, true);
     this.score += 1;
-    this.scoreText.setText('Euros: ' + this.score);
-
+    this.scoreText.setText('Euro: ' + this.score);
     this.collectedCollectibles.push(touchedItem.origIndex);
     this.registry.set('collectedCollectibles', this.collectedCollectibles);
   }

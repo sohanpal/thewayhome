@@ -143,6 +143,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     tiles[21][12] = 'grass';
 
     tiles[25][10] = 'sand'; // To reach here, jump from grass
+    tiles[24][10] = 'sand'; // To reach here, jump from grass
     tiles[25][8] = 'sand'; // Hard-to-jump tile
 
     tiles[21][7] = 'sand'; // Blocks with a way to the next level
