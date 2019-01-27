@@ -25,7 +25,7 @@ export default class MenuScene extends Phaser.Scene {
     const btnStartGame = this.add.text(config.width/2 - 95, 60, 'Start Game', menuStyle);
     btnStartGame.setInteractive();
     btnStartGame.on('pointerdown', () => {
-      this.scene.start('Belarus');
+      this.scene.start('India');
     }, this);
 
     // Will be read in the GameScene
