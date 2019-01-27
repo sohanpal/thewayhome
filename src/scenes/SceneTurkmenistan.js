@@ -25,7 +25,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     this.load.image('sand','assets/tilesets/nature/sand/slice05_05_128.png');
     this.load.image('sand_ground','assets/tilesets/nature/sand/slice27_27_128.png');
     this.load.image('grass','assets/tilesets/nature/_grass/grass07.png');
-    this.load.image('stone06','assets/tilesets/nature/_rocks/stone06.png');
+    this.load.image('100manat', 'assets/currencies/100manat.jpg');
   }
 
   /**
@@ -63,7 +63,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
       [17, 4], [18, 2],
       [23, 6]
     ];
-    commons.prepareCollectibles(this.collectibleCoordinates, this);
+    commons.prepareCollectibles(this.collectibleCoordinates, this, '100manat');
 
     // Create lava tileset
     this.lava = this.physics.add.staticGroup();
@@ -157,7 +157,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
 
     let prevSceneScore = this.registry.get('score');
 
-    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 10) {
+    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 1) {
       this.sound.playAudioSprite('sfx', 'escape');
       this.registry.set('score', this.score);
       this.scene.start(this.nextScene);

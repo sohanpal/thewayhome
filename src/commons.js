@@ -194,9 +194,9 @@ export default {
    * Expects a handler context.touchCollectible to exist, which is called
    * in collision of player and item.
    */
-  prepareCollectibles(coordinates, context) {
+  prepareCollectibles(coordinates, context, icon = 'star') {
     context.collectibles = context.physics.add.group({
-      key: 'star',
+      key: icon,
       frameQuantity: Object.keys(coordinates).length
     });
 
