@@ -41,7 +41,7 @@ export default class SceneGermany extends Phaser.Scene {
     this.finish = this.physics.add.image(1500, 720, 'shroom03').setScale(.5);
     this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
-    this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
+    this.scoreText = this.add.text(16, 16, 'Euro: ' + this.score, { fontSize: '32px', fill: '#000' });
 
     this.physics.add.collider(this.finish, this.platforms);
     this.physics.add.overlap(this.player, this.finish, this.goToSecret, null, this);
@@ -82,6 +82,6 @@ export default class SceneGermany extends Phaser.Scene {
     this.sound.playAudioSprite('sfx', 'numkey');
     touchedItem.disableBody(true, true);
     this.score += 1;
-    this.scoreText.setText('Score: ' + this.score);
+    this.scoreText.setText('Euro: ' + this.score);
   }
 };
