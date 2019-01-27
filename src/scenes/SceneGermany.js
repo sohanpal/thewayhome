@@ -6,7 +6,7 @@ export default class SceneGermany extends Phaser.Scene {
 
   constructor () {
     super('Germany');
-    this.nextScene = 'India';
+    this.nextScene = 'Credits';
   }
 
   init() {
@@ -17,13 +17,13 @@ export default class SceneGermany extends Phaser.Scene {
    * Preload images.
    */
   preload () {
-    console.log("preload game 2");
     commons.preload(this);
     this.load.image('background','assets/backgrounds/mountains_low.jpg');
 
     this.load.image('shroom03','assets/tilesets/nature/flowers_plants/mushroom03.png');
     this.load.image('stone01','assets/tilesets/nature/_rocks/stone01.png');
     this.load.image('stone06','assets/tilesets/nature/_rocks/stone06.png');
+    this.load.image('map_board','assets/tilesets/nature/signs/board09.png');
   }
 
   /**
@@ -62,6 +62,12 @@ export default class SceneGermany extends Phaser.Scene {
       ];
     }
     commons.prepareCollectibles(this.collectibleCoordinates, this);
+
+    // Map board, when you touch you go to the next level
+    this.finish = this.physics.add.image(1500, 60, 'map_board').setScale(.7);
+    this.finish.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    this.physics.add.collider(this.finish, this.platforms);
+    this.physics.add.overlap(this.player, this.finish, this.finishStage, null, this);
   }
 
   /**
@@ -82,6 +88,12 @@ export default class SceneGermany extends Phaser.Scene {
       this.scene.start('GermanySecret');
   }
 
+  finishStage (player, star)
+  {
+      this.registry.set('score', this.score);
+      this.scene.start(this.nextScene);
+  }
+
   prepareTileSet ()
   {
     let tiles = commons.getBasicSceneTileSet();
@@ -91,8 +103,6 @@ export default class SceneGermany extends Phaser.Scene {
     tiles[1][11] = 'leafy01';
     tiles[2][12] = 'leafy01';
     tiles[2][13] = 'full_ground';
-    tiles[3][12] = 'leafy01';
-    tiles[3][13] = 'full_ground';
 
     for (let y = 9; y <= 13; y++) {
       for (let x = 6; x <= 8; x++) {
@@ -129,6 +139,10 @@ export default class SceneGermany extends Phaser.Scene {
       tiles[x][9] = 'leafy03';
     }
 
+    for (let x = 22; x <= 25; x++) {
+      tiles[x][3] = 'leafy03';
+    }
+
     for (let x = 12; x <= 16; x++) {
       tiles[x][10] = 'leafy03';
     }
@@ -150,13 +164,5 @@ export default class SceneGermany extends Phaser.Scene {
     this.scoreText.setText('Score: ' + this.score);
 
     delete this.collectibleCoordinates[touchedItem.origIndex];
-
-    let prevSceneScore = this.registry.get('score');
-
-    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 10) {
-      this.sound.playAudioSprite('sfx', 'escape');
-      this.registry.set('score', this.score);
-      this.scene.start(this.nextScene);
-    }
   }
 };
