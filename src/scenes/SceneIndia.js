@@ -33,6 +33,7 @@ export default class GameScene2 extends Phaser.Scene {
     this.load.image('water','assets/tilesets/nature/_water/water1.png');
     this.load.image('start_sign','assets/tilesets/nature/signs/board03.png');
     this.load.image('end_sign','assets/tilesets/nature/signs/board09.png');
+    this.load.image('inr', 'assets/currencies/inr.png');
   }
 
   /**
@@ -82,7 +83,7 @@ export default class GameScene2 extends Phaser.Scene {
         this
     );
 
-    commons.prepareCollectibles(this.collectibleCoordinates, this);
+    commons.prepareCollectibles(this.collectibleCoordinates, this, 'inr');
   }
 
   // event handler for player touching water
