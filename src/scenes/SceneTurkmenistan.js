@@ -25,7 +25,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     this.load.image('sand','assets/tilesets/nature/sand/slice05_05_128.png');
     this.load.image('sand_ground','assets/tilesets/nature/sand/slice27_27_128.png');
     this.load.image('grass','assets/tilesets/nature/_grass/grass07.png');
-    this.load.image('100manat', 'assets/currencies/100manat.jpg');
+    this.load.image('5manat', 'assets/currencies/TurkmenManat.png');
   }
 
   /**
@@ -63,7 +63,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
       [17, 4], [18, 2],
       [23, 6]
     ];
-    commons.prepareCollectibles(this.collectibleCoordinates, this, '100manat');
+    commons.prepareCollectibles(this.collectibleCoordinates, this, '5manat');
 
     // Create lava tileset
     this.lava = this.physics.add.staticGroup();
@@ -141,7 +141,6 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     tiles[21][12] = 'grass';
 
     tiles[25][10] = 'sand'; // To reach here, jump from grass
-    tiles[24][10] = 'sand'; // To reach here, jump from grass
     tiles[25][8] = 'sand'; // Hard-to-jump tile
 
     tiles[21][7] = 'sand'; // Blocks with a way to the next level
