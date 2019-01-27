@@ -194,19 +194,23 @@ export default {
    * Expects a handler context.touchCollectible to exist, which is called
    * in collision of player and item.
    */
-  prepareCollectibles(coordinates, context) {
+  prepareCollectibles(coordinates, context, icon = 'star') {
     context.collectibles = context.physics.add.group({
-      key: 'star',
-      frameQuantity: coordinates.length
+      key: icon,
+      frameQuantity: Object.keys(coordinates).length
     });
 
+    let countedIndex = 0;
+
     context.collectibles.getChildren().forEach((item, index) => {
-      if (coordinates[index] === undefined) {
-        item.destroy();
+      if (coordinates[countedIndex] === undefined) {
+        //item.destroy();
       } else {
-        item.x = coordinates[index][0] * 64 - 32;
-        item.y = coordinates[index][1] * 64 - 32 - 12;
+        item.x = coordinates[countedIndex][0] * 64 - 32;
+        item.y = coordinates[countedIndex][1] * 64 - 32 - 12;
       }
+
+      countedIndex++;
 
       item.origIndex = index;
     });

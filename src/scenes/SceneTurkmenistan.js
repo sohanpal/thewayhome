@@ -25,7 +25,7 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     this.load.image('sand','assets/tilesets/nature/sand/slice05_05_128.png');
     this.load.image('sand_ground','assets/tilesets/nature/sand/slice27_27_128.png');
     this.load.image('grass','assets/tilesets/nature/_grass/grass07.png');
-    this.load.image('stone06','assets/tilesets/nature/_rocks/stone06.png');
+    this.load.image('100manat', 'assets/currencies/100manat.jpg');
   }
 
   /**
@@ -55,15 +55,15 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     this.physics.add.collider(this.w_board, this.platforms);
 
     this.collectibleCoordinates = [
-      [4, 5], [7, 3], [9, 9], [10, 2], [12, 2], [14, 2], [5, 12],
-      [4, 9], [6, 7], [8, 7], [10, 7],
-      [14, 5], [16, 5], [18, 5],
-      [19, 8], [21, 8], [23, 8],
-      [10, 12], [12, 12], [14, 12], [16, 12], [18, 12], [20, 12],
-      [12, 9], [14, 9], [17, 10],
+      [4, 1], [6, 2],
+      [3, 10], [5, 8], [7, 3],
+      [4, 12], [6, 7], [8, 12], [11, 3],
+      [16, 1], [16, 4], [16, 7], [16, 10],
+      [19, 1], [19, 4], [19, 7], [19, 10],
+      [17, 4], [18, 2],
+      [23, 6]
     ];
-    //@odo uncomment
-    commons.prepareCollectibles(this.collectibleCoordinates, this);
+    commons.prepareCollectibles(this.collectibleCoordinates, this, '100manat');
 
     // Create lava tileset
     this.lava = this.physics.add.staticGroup();
@@ -93,20 +93,16 @@ export default class SceneTurkmenistan extends Phaser.Scene {
   }
 
   // event handler for player touching lava
-  touchLava (player, touchedItem)
+  touchLava ()
   {
     this.registry.set('score', this.score - 10);
-    this.scene.restart();
-    //console.log('Lava!');
+    this.player.body.reset(100, 100);
   }
 
   finishStage (player, star)
   {
-      //this.star.disableBody(true, true);
-      this.registry.set('score', this.score);
-      this.scene.start(this.nextScene);
-      //this.score += 10;
-      //this.scoreText.setText('Score: ' + this.score);
+    this.registry.set('score', this.score);
+    this.scene.start(this.nextScene);
   }
 
   prepareTileSet ()
@@ -128,24 +124,28 @@ export default class SceneTurkmenistan extends Phaser.Scene {
     for (let x = 21; x <= 25; x++) {
       tiles[x][13] = 'sand';
     }
-    // Blocks with a way to the next level
-    tiles[21][7] = 'sand';
-    tiles[22][7] = 'sand';
 
-    tiles[25][8] = 'sand';
+    let y = 10;
+    for (let x = 2; x <= 6; x++) {
+      tiles[x][y] = 'sand'; // Ladder
+      y--;
+    }
 
-    tiles[17][11] = 'sand';
-    tiles[18][11] = 'sand';
-    tiles[25][10] = 'sand';
-    tiles[24][10] = 'sand';
+    tiles[3][11] = 'sand'; // Road with holes
+    tiles[5][11] = 'sand'; // Road with holes
+    tiles[7][11] = 'sand'; // Road with holes
+
+    tiles[17][11] = 'sand'; // Above lava
+    tiles[18][11] = 'sand'; // Above lava
+
     tiles[21][12] = 'grass';
-    
 
-    // for (let y = 10; y <= 13; y++) {
-    //   for (let x = 6; x <= 8; x++) {
-    //     tiles[x][y] = 'sand_ground';
-    //   }
-    // }
+    tiles[25][10] = 'sand'; // To reach here, jump from grass
+    tiles[25][8] = 'sand'; // Hard-to-jump tile
+
+    tiles[21][7] = 'sand'; // Blocks with a way to the next level
+    tiles[22][7] = 'sand'; // Blocks with a way to the next level
+
     return tiles;
   }
 
@@ -157,12 +157,10 @@ export default class SceneTurkmenistan extends Phaser.Scene {
 
     let prevSceneScore = this.registry.get('score');
 
-    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 10) {
+    if (this.score - prevSceneScore == this.collectibleCoordinates.length * 1) {
       this.sound.playAudioSprite('sfx', 'escape');
       this.registry.set('score', this.score);
       this.scene.start(this.nextScene);
     }
-
-    
   }
 };
