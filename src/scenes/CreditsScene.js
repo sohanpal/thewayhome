@@ -8,6 +8,7 @@ export default class CreditsScene extends Phaser.Scene {
  
   preload () {
     this.load.image('logo', 'assets/Logo_without_background.png');
+    this.load.image('home', 'assets/home_aviator.png');
   }
 
   /**
@@ -17,6 +18,9 @@ export default class CreditsScene extends Phaser.Scene {
     // "The way back home" logo
     const logo = this.add.image(1350, 200, 'logo');
     logo.setScale(.50);
+
+    const home = this.add.image(250, 200, 'home');
+    //home.setScale(.50);
 
     const scoreTextStyle = {
       fill: '#a2e363',
