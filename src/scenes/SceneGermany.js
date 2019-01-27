@@ -18,7 +18,7 @@ export default class SceneGermany extends Phaser.Scene {
    */
   preload () {
     commons.preload(this);
-    this.load.image('background','assets/backgrounds/mountains_low.jpg');
+    this.load.image('background_germany','assets/backgrounds/germany2.jpg');
 
     this.load.image('shroom03','assets/tilesets/nature/flowers_plants/mushroom03.png');
     this.load.image('stone01','assets/tilesets/nature/_rocks/stone01.png');
@@ -31,7 +31,7 @@ export default class SceneGermany extends Phaser.Scene {
    */
   create () {
     commons.createPlatform(this);
-    const background = this.add.image(800, 400, 'background');
+    const background = this.add.image(800, 400, 'background_germany');
     background.setDisplaySize(config.width, config.height);
 
     commons.renderTileSet(this.prepareTileSet(), this);
